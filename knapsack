@@ -1,0 +1,61 @@
+/*
+this is my code for knapsack 
+this not finished yet
+*/
+#include <bits/stdc++.h>
+using namespace std;
+
+int knp(vector<pair<int,int>> &cek, int n,int k,vector<vector<int>> &memo,int i, int mass,vector<bool> &mark,vector <bool> &mk ){
+  if (k<=0){
+   
+    mk= show (mark,mass); 
+    
+    return mass;
+  }
+  if (i>=cek.size()){
+    show (mark,mass);
+    return mass;
+    
+  }
+  if (memo[i][k]!=-1){
+    return memo[i][k];
+  } 
+  int take=0;
+    if (k-cek[i].first >=0){
+    mark[i]=true;
+    take = knp(cek,n, k-cek[i].first,memo,i+1,mass+cek[i].second,mark,mk);
+    
+    }
+    
+    mark[i]=false;
+    int ntake = knp(cek,n, k,memo,i+1,mass,mark,mk);
+    
+    return memo[i][k]= max(take,ntake);
+}
+void mn(vector<pair<int,int>> &cek, int n,int k){
+  vector<vector<int>>memo(n,vector<int>(k+1,-1));
+  int mass=0;
+  int i =0;
+  vector<bool> mark(n);
+  fill(mark.begin(),mark.end(),false);
+  vector<bool> mk(n);
+  fill(mk.begin(),mk.end(),false);
+  int maks = knp(cek,n,k,memo,i,mass,mark,mk);
+  for (int i =0; i < cek.size();i++){
+    if (mark[i]){
+      cout << i << ' ';
+    }
+  }
+  cout <<mark[i];
+
+}
+signed main(){
+  int n,k;
+  cin >> k >> n;
+  vector<pair<int,int>> cek(n);
+  for (auto &i : cek){
+    cin >> i.first >> i.second;
+  }
+  mn(cek,n,k);
+  
+}
